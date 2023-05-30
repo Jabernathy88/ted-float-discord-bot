@@ -1,0 +1,20 @@
+{
+  "name": "ted-float-discord-bot",
+  "version": "1.0.0",
+  "description": "Reporting via Discord's application commands, with a custom bot.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/rest": "^1.7.1",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

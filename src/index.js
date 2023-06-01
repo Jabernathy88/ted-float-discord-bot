@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 
 config();
 
-import { Client, GatewayIntentBits, Routes, TextInputStyle } from 'discord.js';
+import { Client, GatewayIntentBits, InteractionType, Routes, TextInputStyle } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder } from '@discordjs/builders';
 
@@ -19,9 +19,9 @@ const commands = [
     }
 ];
 
-client.on('interactionCreate', (interaction) => {
+client.on('interactionCreate', async (interaction) => {
     if (interaction.isUserContextMenuCommand()) {
-        console.log(interaction.commandName);
+        // console.log(interaction.commandName);
         if (interaction.commandName === 'Report') {
             const modal = new ModalBuilder()
                 .setCustomId('reportUserModal')
@@ -36,12 +36,25 @@ client.on('interactionCreate', (interaction) => {
                             .setMinLength(10)
                             .setMaxLength(500)
                     )
-
                 );
-            interaction.showModal(modal);
+            await interaction.showModal(modal);
+            const modalSubmitInteraction = await interaction.awaitModalSubmit({
+                filter: (i) => { // parameter i, similar to user 'event' type parameter
+                    console.log('Await Modal Submit');
+                    return true;
+                },
+                time: 115000,
+            });
+            console.log(interaction.user.tag)
+            console.log(interaction.targetUser.tag)
+
+            modalSubmitInteraction.reply({
+                content: `Thank you for reporting: ${interaction.targetMember}. Reason: ${modalSubmitInteraction.fields.getTextInputValue('reportMessage')}`,
+                ephemeral: true, 
+            });
         }
     }
-})
+});
 
 async function main() {
     try {
